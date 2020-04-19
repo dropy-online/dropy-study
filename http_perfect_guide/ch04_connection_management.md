@@ -55,3 +55,16 @@ TCP 커넥션은 안정성을 위해 TIME_WAIT 단계를 갖는다.
 
 ![parallel connection](https://user-images.githubusercontent.com/47515936/79690237-62a56a80-8294-11ea-959f-31dc39a2e1f8.png)
 
+### 3.2. 지속 커넥션
+
+- 요청에 `Connection: close` 헤더를 포함해서 보내면, 그 커넥션으로 추가적인 요청을 보낼 수 없다.
+- 추가 요청을 보내지 않을 것이라면, 마지막 요청에 `Connection: close`를 보내야 한다.
+- 청크 인코딩을 하거나, 정확한 Content-Length 를 반드시 포함시켜야한다.
+- 프락시는 클라이언트 서버 각각에 대해 별도의 지속 커넥션을 관리해야 한다.
+- 프락시는 클라이언트 지원범위를 모를 때 지속 커넥션을 맺으면 안된다.
+- Connection 헤더와 관련없이 커넥션을 언제든 끊을 수 있다.
+- 각각의 클라이언트는 각자 두개의 지속 커넥션만 유지 가능하다.
+
+![continuous connection](https://user-images.githubusercontent.com/47515936/79690353-f9722700-8294-11ea-9588-5cb6d60e151f.png)
+
+
