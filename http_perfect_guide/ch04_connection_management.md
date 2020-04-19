@@ -67,4 +67,16 @@ TCP 커넥션은 안정성을 위해 TIME_WAIT 단계를 갖는다.
 
 ![continuous connection](https://user-images.githubusercontent.com/47515936/79690353-f9722700-8294-11ea-9588-5cb6d60e151f.png)
 
+### 3.3. 파이프라인 지속 커넥션
+
+요청을 큐에 쌓아둠으로써 파이프라이닝을 할 수 있다.
+
+- 지속커넥션인지 확인하기 전까지는 파이프라인을 이어서는 안된다.
+- 응답은 요청과 순서가 같게 와야 한다.
+- 클라이언트는 서버가 지속 커넥션을 갑자기 끊어도, 다시 커넥션을 맺고 요청을 보낼 수 있어야 한다.
+- POST 요청과 같이 반복해서 보내면 안되는 요청을 파이프라이닝 해서는 안된다.
+
+![pipline continuous connection](https://user-images.githubusercontent.com/47515936/79690439-5d94eb00-8295-11ea-8e28-ef7bdd76635a.png)
+
+
 
