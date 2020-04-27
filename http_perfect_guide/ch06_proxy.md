@@ -285,6 +285,6 @@ Allow 엔티티 헤더 필드는, 요청 URI에 의해 식별되는 자원에 �
 
 ## Reference
 
-[프록시란?]([https://ko.wikipedia.org/wiki/%ED%94%84%EB%A1%9D%EC%8B%9C_%EC%84%9C%EB%B2%84](https://ko.wikipedia.org/wiki/프록시_서버))
+[프록시란?](https://ko.wikipedia.org/wiki/%ED%94%84%EB%A1%9D%EC%8B%9C_%EC%84%9C%EB%B2%84)
 
 [CDN이란?](https://en.wikipedia.org/wiki/Content_delivery_network)
