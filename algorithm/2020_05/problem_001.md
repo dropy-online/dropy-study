@@ -30,6 +30,7 @@ tree.insert(50);
 //      |- 30
 //      `- 50
 printTree(tree);
+tree.insert(15);
 tree.insert(18);
 // 20
 //  |- 15
