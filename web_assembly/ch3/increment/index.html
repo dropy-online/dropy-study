@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>웹 어셈블리 : increment 모듈화 하기</title>
+</head>
+<body>
+  <script>
+    const memory = new WebAssembly.Memory({
+      initial: 1,
+    });
+    const table = new WebAssembly.Table({
+      initial: 1,
+      element: 'anyfunc',
+    });
+    window.wasmUrl = 'increment.wasm';
+    window.importObject = {
+      env: {
+        // 동적 링크를 하지 않으므로 0으로 설정
+        __memory_base: 0,
+        __table_base: 0,
+        // memory 페이지는 처음에는 1 페이지만 생성, 최대 10페이지 까지 생성가능하도록 설정 (페이지당 64kb)
+        memory,
+        table
+      },
+    };
+  </script>
+
+  <!--
+    웹 어셈블리 로드&컴파일을 병렬로 했을 때, 이점 이해하기.
+    https://developers.google.com/web/updates/2018/04/loading-wasm
+  -->
+  <!-- 다운로드 후 컴파일 -->
+  <script>
+    (async () => {
+      const response = await fetch(wasmUrl);
+      const buffer = await response.arrayBuffer();
+      const myModule = await WebAssembly.compile(buffer);
+      const instance = await WebAssembly.instantiate(myModule, importObject);
+      const num18 = instance.exports.Increment(17);
+      
+      console.log(`compile after download: ${num18}`);
+    })();
+  </script>
+
+  <!-- 다운로드 와 컴파일 병행 -->
+  <script>
+    (async () => {
+      const response = fetch(wasmUrl);
+      const { instance } = await WebAssembly.instantiateStreaming(response, importObject);
+      const num18 = instance.exports.Increment(17);
+
+      console.log(`compile with download: ${num18}`);
+    })();
+  </script>
+</body>
+</html>
