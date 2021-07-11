@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    HTML page I created for my WebAssembly module.
+
+    <script>
+      const createImportObject = () => {
+        const memory = new WebAssembly.Memory({
+          initial: 256,
+        });
+        const table = new WebAssembly.Table({
+          initial: 256,
+          element: 'anyfunc',
+        });
+        return {
+          env: { 
+            abortStackOverflow: () => {throw new Error('stack overflow'); },
+            __memory_base: 0,
+            __table_base: 0,
+            memory,
+            table,
+            STACKTOP: 0,
+            STACK_MAX: memory.buffer.byteLength,
+          }
+        }
+      };
+
+      async function start() {
+        const isPrimeIMO = createImportObject();
+        const isPrimeModule = await WebAssembly.instantiateStreaming(
+          fetch("./is_prime.wasm"),
+          isPrimeIMO,
+        )
+
+        const findPrimeIMO = createImportObject();
+        findPrimeIMO.env.IsPrime = isPrimeModule.instance.exports.IsPrime;
+        findPrimeIMO.env.LogPrime = (prime) => {
+          console.log(prime.toString());
+        }
+
+        const findPrimeModule = await WebAssembly.instantiateStreaming(
+          fetch("./find_primes.wasm"),
+          findPrimeIMO
+        );
+
+        findPrimeModule.instance.exports.FindPrimes(3, 100);
+      }
+      start();
+    </script>
+  </body>
+</html>
