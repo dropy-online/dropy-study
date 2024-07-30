@@ -9,6 +9,12 @@ const projectName = "calculate_primes";
  * dependency 없는 간단한 static web server
  */
 const server = http.createServer((req, res) => {
+    if (path.normalize(decodeURI(req.url)) !== decodeURI(req.url)) {
+        res.statusCode = 403;
+        res.end();
+        return;
+    }
+
   const relativePath = req.url.substr(1);
   const filePath = path.resolve(__dirname, relativePath);
   const ext = req.url.substr(req.url.lastIndexOf(".") + 1);
